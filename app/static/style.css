@@ -1,0 +1,579 @@
+/* app/static/style.css */
+
+/* --- General Body Styles --- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Keeps the centering effect */
+    background: linear-gradient(135deg, #a8dadc, #457b9d);
+    color: #333;
+    overflow-y: auto; /* CHANGE: Allow body to scroll if card itself is very tall on small screens */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    padding: 10px 0; /* Add some minimal padding to ensure space from top/bottom edges */
+    box-sizing: border-box;
+}
+
+/* --- NEW: Styles for all main content screens (upload, processing, results, error) --- */
+.main-screen {
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    text-align: center;
+    width: 90%;
+    max-width: 500px; /* Default max-width for most screens */
+    box-sizing: border-box;
+    opacity: 0;
+    transition: opacity 0.8s ease-in, transform 0.8s ease-in;
+    transform: translateY(-20px);
+    /* CHANGE: Adjusted margin to be more flexible and prevent overflow */
+    margin: 20px auto; /* Auto for horizontal centering, 20px top/bottom */
+    flex-shrink: 0;
+    /* ADDED: Max height to prevent overflowing the viewport, but allowing internal content to shrink */
+    max-height: calc(100vh - 40px); /* 100vh minus 20px top/bottom body padding */
+    display: flex; /* Make it a flex container */
+    flex-direction: column; /* Stack content vertically */
+    justify-content: space-between; /* Distribute space between elements if needed */
+}
+
+/* For when a main screen is shown by JavaScript */
+.main-screen:not(.hidden) {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Global Hidden Class --- */
+.hidden {
+    display: none !important;
+}
+
+/* --- Welcome Screen Styles (No changes needed here) --- */
+#welcome-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #a8dadc, #457b9d);
+    color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+    flex-direction: column;
+}
+
+#welcome-screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.welcome-content {
+    text-align: center;
+    animation: fadeInScale 1.5s ease-out forwards;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 50px;
+}
+
+.welcome-content h1 {
+    font-size: 5.5em;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    color:#ffffff;
+}
+
+.welcome-content p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-style: italic;
+    opacity: 0.8;
+    color:#ffffff;
+}
+
+/* --- Fruit Animation Line Styles --- */
+.fruit-animation-line {
+    width: 100%;
+    position: absolute;
+    bottom: -30px;
+    left: 0;
+    overflow: hidden;
+    height: 5em;
+    display: flex;
+    align-items: center;
+}
+
+.fruit-icons-wrapper {
+    display: flex;
+    white-space: nowrap;
+    animation: slideHorizontal 20s linear infinite;
+    height: 100%;
+}
+
+.fruit-icon {
+    font-size: 2em;
+    color: #ffffff;
+    opacity: 0.9;
+    padding: 0 0.9em;
+    animation: gentleDip 3s ease-in-out infinite alternate;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Keyframe Animations */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes slideHorizontal {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@keyframes gentleDip {
+    from { transform: translateY(0); }
+    to { transform: translateY(10px); }
+}
+
+
+/* --- Upload Screen Specifics --- */
+.upload-area {
+    border: 3px dashed #a8dadc;
+    border-radius: 10px;
+    padding: 40px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 150px;
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+.upload-area:hover {
+    background-color: #e0f2f7;
+    border-color: #457b9d;
+}
+
+.upload-area.drag-over {
+    background-color: #d1ecf1;
+    border-color: #1d3557;
+    box-shadow: 0 0 15px rgba(29, 53, 87, 0.2);
+}
+
+.upload-icon {
+    font-size: 3em;
+    color: #457b9d;
+    margin-bottom: 15px;
+}
+
+.upload-text {
+    font-size: 1.1em;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.file-input {
+    display: none;
+}
+
+.upload-button {
+    background-color: #a8dadc;
+    color: #1d3557;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+}
+
+.upload-button:hover {
+    background-color: #457b9d;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+
+/* --- Processing Screen (Spinner) --- */
+#processing-screen-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+.spinner {
+    border: 8px solid rgba(255, 255, 255, 0.3);
+    border-top: 8px solid #1d3557;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 25px;
+}
+
+.processing-text {
+    font-size: 1.2em;
+    color: #457b9d;
+    font-weight: 600;
+}
+
+/* --- Results Screen (Your Floating Card) --- */
+.fruit-analysis-container.main-screen {
+    max-width: 600px;
+    min-height: auto;
+    /* CHANGE: Remove display: flex to prevent it from fighting with .main-screen's flex-direction: column */
+    display: block; /* Let it behave like a standard block element within .main-screen */
+    padding: 0;
+}
+
+.fruit-analysis-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    /* CHANGE: Allow content to dictate height, but shrink where possible */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* ADDED: Add padding-bottom to ensure button doesn't hug the bottom too much */
+    padding-bottom: 10px;
+}
+
+.fruit-analysis-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(211, 211, 211, 0.5);
+}
+/* Add this to your style.css */
+.ambiguity-message {
+    background-color: #fff3cd; /* Light yellow for warning */
+    border: 1px solid #ffeeba;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 20px;
+    color: #856404; /* Dark yellow text */
+    font-size: 0.95em;
+    font-style: italic;
+    text-align: center;
+}
+
+.ambiguity-message.hidden {
+    display: none;
+}
+/* --- Results Screen INNER Elements --- */
+#results-screen-section h2 {
+    color: #1d3557;
+    margin-bottom: 15px;
+    font-size: 2.2em;
+    font-weight: 700;
+    text-align: center;
+}
+
+.result-image-container {
+    margin-bottom: 15px; /* CHANGE: Reduced margin to save vertical space */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.uploaded-fruit-img {
+    max-width: 100%;
+    max-height: 200px; /* CHANGE: Reduced max-height to save vertical space */
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.prediction-info p {
+    font-size: 1.2em;
+    margin: 8px 0; /* CHANGE: Reduced margin */
+    color: #333;
+    text-align: center;
+}
+
+.highlight {
+    font-weight: bold;
+    color: #1d3557;
+}
+
+.advice-info {
+    background-color: #f1faee;
+    border-radius: 10px;
+    padding: 15px; /* CHANGE: Reduced padding */
+    margin-top: 20px; /* CHANGE: Reduced margin */
+    text-align: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.advice-info h3 {
+    color: #1d3557;
+    margin-top: 0;
+    margin-bottom: 10px; /* CHANGE: Reduced margin */
+    font-size: 1.3em;
+}
+
+.advice-info p {
+    margin-bottom: 8px; /* CHANGE: Reduced margin */
+    line-height: 1.5;
+    color: #333;
+}
+
+.scan-again-button {
+    background-color: #a8dadc;
+    color: #1d3557;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px; /* CHANGE: Slightly reduced padding */
+    font-size: 1em; /* CHANGE: Slightly reduced font size */
+    cursor: pointer;
+    margin-top: 25px; /* CHANGE: Reduced margin to pull it up */
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    font-weight: 600;
+}
+
+.scan-again-button:hover {
+    background-color: #457b9d;
+    color: #fff;
+    transform: translateY(-2px);
+}
+
+/* --- Error Screen --- */
+#error-screen-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    color: #e63946;
+    flex-grow: 1; /* Allow it to take available space */
+}
+
+.error-icon {
+    font-size: 3.5em;
+    margin-bottom: 20px;
+    color: #e63946;
+}
+
+#error-screen-section h2 {
+    color: #e63946;
+    margin-bottom: 15px;
+}
+
+#errorMessage {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1.1em;
+}
+
+/* Add a touch of elegance to the highlight text */
+.prediction-info .highlight,
+.advice-info p {
+    text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.05);
+}
+
+/* --- Responsive Adjustments --- */
+/* For tablets and smaller desktops */
+@media (max-width: 900px) {
+    .welcome-content h1 {
+        font-size: 4em;
+    }
+    .main-screen {
+        padding: 30px;
+        max-width: 450px;
+    }
+    .fruit-analysis-container.main-screen {
+        max-width: 550px;
+    }
+    .uploaded-fruit-img {
+        max-height: 180px; /* Further reduced image height */
+    }
+    .fruit-analysis-card {
+        padding: 20px; /* Adjust inner card padding */
+    }
+    .advice-info {
+        padding: 12px; /* Reduced advice info padding */
+    }
+    .scan-again-button {
+        margin-top: 20px; /* Adjusted margin */
+    }
+}
+/* --- How to Use Button --- */
+.how-to-use-button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px; /* Space from the upload area */
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.how-to-use-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* --- How to Use Card (similar to upload-area/fruit-analysis-card) --- */
+.how-to-use-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    max-width: 600px; /* Adjust as needed */
+    width: 90%;
+    text-align: center;
+    margin: 40px auto; /* Center the card and add vertical space */
+    animation: fadeIn 0.5s ease-out;
+}
+
+.how-to-list {
+    list-style: none; /* Remove default bullet points */
+    padding: 0;
+    text-align: left; /* Align list items left within the card */
+    margin-top: 25px;
+}
+
+.how-to-list li {
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    padding: 12px 15px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 0.95em;
+    line-height: 1.4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.how-to-icon {
+    color: #4CAF50; /* Green icon color */
+    margin-right: 15px;
+    font-size: 1.2em;
+    min-width: 25px; /* Ensure icons align nicely */
+    text-align: center;
+}
+
+/* Existing .scan-again-button can be reused for the close button */
+#howToUseCloseButton {
+    margin-top: 30px; /* Space above the button */
+}
+
+/* Ensure the main-screen has enough height for the how-to-use-screen */
+#how-to-use-screen-section {
+    min-height: calc(100vh - 100px); /* Adjust based on your header/footer */
+    display: flex; /* Use flexbox to center content vertically if needed */
+    align-items: center;
+    justify-content: center;
+}
+/* For mobile devices */
+@media (max-width: 600px) {
+    body {
+        padding: 5px 0; /* Minimal padding on very small screens */
+    }
+    .welcome-content h1 {
+        font-size: 2.8em; /* Smaller on mobile */
+    }
+    .welcome-content p {
+        font-size: 0.9em;
+    }
+    .fruit-icon {
+        font-size: 7em; /* Smaller icons */
+    }
+    .main-screen {
+        padding: 15px; /* Reduced padding for smaller screens */
+        width: calc(100% - 20px); /* 100% minus the 10px margin on each side */
+        max-width: none; /* Allow it to shrink beyond default max-width */
+        margin: 10px auto; /* Reduced margin for tight spaces */
+        max-height: calc(100vh - 20px); /* Adjust max-height for very small body padding */
+    }
+    .fruit-analysis-container.main-screen {
+        max-width: none;
+        padding: 0;
+    }
+    .fruit-analysis-card {
+        padding: 10px; /* Even less padding for this inner card */
+    }
+    #results-screen-section h2 {
+        font-size: 1.6em;
+        margin-bottom: 10px; /* Adjusted margin */
+    }
+    .uploaded-fruit-img {
+        max-height: 120px; /* Even smaller image on mobile */
+        margin-bottom: 10px; /* Adjusted margin */
+    }
+    .prediction-info p {
+        font-size: 0.85em; /* Smaller text */
+        margin: 5px 0; /* Reduced margin */
+    }
+    .advice-info {
+        padding: 10px; /* Minimal advice padding */
+        margin-top: 15px; /* Reduced margin */
+    }
+    .advice-info h3 {
+        font-size: 1.1em;
+        margin-bottom: 8px; /* Adjusted margin */
+    }
+    .advice-info p {
+        font-size: 0.8em; /* Even smaller text */
+        margin-bottom: 5px; /* Reduced margin */
+    }
+    .scan-again-button,
+    .upload-button {
+        font-size: 0.85em;
+        padding: 8px 15px;
+        margin-top: 15px; /* Adjusted margin */
+    }
+    .upload-area {
+        padding: 20px 10px; /* Reduced padding */
+    }
+    .upload-icon {
+        font-size: 2em;
+    }
+}

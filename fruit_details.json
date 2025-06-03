@@ -1,0 +1,122 @@
+{
+  "apple": {
+    "ripe": {
+      "shelf_life": "3-4 weeks in the fridge",
+      "storage_tips": "Keep in the refrigerator crisper drawer. Avoid washing until ready to eat."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Discard immediately. Do not consume spoiled apples."
+    }
+  },
+  "banana": {
+    "overripe": {
+      "shelf_life": "1-2 days (best for baking/smoothies)",
+      "storage_tips": "Use for banana bread or freeze for smoothies. Skin may be heavily browned."
+    },
+    "ripe": {
+      "shelf_life": "2-3 days at room temperature",
+      "storage_tips": "Keep on the counter. Refrigerate to slow ripening, but skin may darken."
+    },
+    "unripe": {
+      "shelf_life": "5-7 days at room temperature",
+      "storage_tips": "Store at room temperature. Speed up ripening by placing in a paper bag."
+    }
+  },
+  "grapes": {
+    "ripe": {
+      "shelf_life": "5-10 days in the fridge",
+      "storage_tips": "Store unwashed in a breathable bag in the fridge."
+    },
+    "unripe": {
+      "shelf_life": "Few days",
+      "storage_tips": "May not ripen well after picking. Try using in recipes."
+    }
+  },
+  "guava": {
+    "ripe": {
+      "shelf_life": "2-3 days at room temp, 5-7 days in fridge",
+      "storage_tips": "Refrigerate ripe guava. Unripe can ripen at room temperature."
+    },
+    "unripe": {
+      "shelf_life": "3-5 days at room temp",
+      "storage_tips": "Leave at room temperature to ripen naturally."
+    }
+  },
+  "mango": {
+    "ripe": {
+      "shelf_life": "4-5 days in fridge",
+      "storage_tips": "Keep whole mangoes in fridge once ripe. Use within a week."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Discard immediately. Check for mold or sour odors."
+    },
+    "unripe": {
+      "shelf_life": "3-5 days at room temp",
+      "storage_tips": "Ripen at room temperature. Avoid refrigeration before ripe."
+    }
+  },
+  "orange": {
+    "ripe": {
+      "shelf_life": "2-3 weeks in fridge",
+      "storage_tips": "Store in the fridge or in a cool, dry place. Avoid moisture."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Discard. Soft or moldy oranges should not be consumed."
+    },
+    "unripe": {
+      "shelf_life": "1-2 weeks",
+      "storage_tips": "Keep at room temperature. Allow to ripen naturally."
+    }
+  },
+  "papaya": {
+    "ripe": {
+      "shelf_life": "2-3 days in fridge once ripe",
+      "storage_tips": "Refrigerate ripe papaya. Use soon after cutting."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Avoid fermented smell or leaking fruit. Discard safely."
+    },
+    "unripe": {
+      "shelf_life": "3-5 days at room temp",
+      "storage_tips": "Let ripen on the counter. Turn occasionally."
+    }
+  },
+  "pineapple": {
+    "overripe": {
+      "shelf_life": "1 day (best for juicing)",
+      "storage_tips": "Use immediately for juices or smoothies. Discard if fermented."
+    },
+    "ripe": {
+      "shelf_life": "3-5 days in fridge",
+      "storage_tips": "Refrigerate cut pineapple in airtight container. Whole pineapples can stay at room temp for 2-3 days."
+    }
+  },
+  "strawberry": {
+    "ripe": {
+      "shelf_life": "3-7 days in fridge",
+      "storage_tips": "Store in a paper towel-lined container. Do not wash until ready to eat."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Discard if moldy or leaking. Avoid eating spoiled berries."
+    },
+    "unripe": {
+      "shelf_life": "2-3 days",
+      "storage_tips": "Unripe strawberries do not ripen well after picking. Use in recipes."
+    }
+  },
+  "watermelon": {
+    "ripe": {
+      "shelf_life": "7-10 days whole, 3-4 days cut",
+      "storage_tips": "Store whole in cool place. Refrigerate once cut and cover tightly."
+    },
+    "rotten": {
+      "shelf_life": "Not edible",
+      "storage_tips": "Discard if mushy, sour, or has fermented smell."
+    }
+  }
+}
