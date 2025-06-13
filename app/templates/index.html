@@ -10,9 +10,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png') }}">
     <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
-
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div id="welcome-screen">
@@ -20,12 +19,20 @@
             <h1>Your Fruit</h1>
             <p>Know your fruit!</p>
             <div class="fruit-animation-line">
-                <i class="fas fa-apple-alt fruit-icon"></i>
-                <i class="fas fa-lemon fruit-icon"></i>
-                <i class="fas fa-leaf fruit-icon"></i>
-                <i class="fas fa-seedling fruit-icon"></i>
-                <i class="fas fa-pepper-hot fruit-icon"></i>
-                <i class="fas fa-carrot fruit-icon"></i>
+                <div class="fruit-icons-wrapper">
+                    <i class="fas fa-apple-alt fruit-icon"></i>
+                    <i class="fas fa-lemon fruit-icon"></i>
+                    <i class="fas fa-leaf fruit-icon"></i>
+                    <i class="fas fa-seedling fruit-icon"></i>
+                    <i class="fas fa-pepper-hot fruit-icon"></i>
+                    <i class="fas fa-carrot fruit-icon"></i>
+                    <i class="fas fa-apple-alt fruit-icon"></i>
+                    <i class="fas fa-lemon fruit-icon"></i>
+                    <i class="fas fa-leaf fruit-icon"></i>
+                    <i class="fas fa-seedling fruit-icon"></i>
+                    <i class="fas fa-pepper-hot fruit-icon"></i>
+                    <i class="fas fa-carrot fruit-icon"></i>
+                </div>
             </div>
         </div>
     </div>
@@ -44,6 +51,7 @@
 
         <button class="how-to-use-button" id="howToUseButton">How to Use</button>
     </div>
+
     <div id="processing-screen-section" class="main-screen hidden">
         <div class="spinner"></div>
         <p class="processing-text">Analyzing your fruit...</p>
@@ -76,55 +84,43 @@
         <button class="scan-again-button" id="errorScanAgainButton">Try Again</button>
     </div>
 
-    <div id="how-to-use-screen-section" class="main-screen hidden">
-        <div class="how-to-use-card">
-            <h2 class="mb-4 text-center" style="color: #4CAF50;">How to Use FruitAI</h2>
-            <p class="text-center text-muted">Follow these simple steps to get insights about your fruit:</p>
+    <section id="how-to-use-screen-section" class="main-screen hidden">
+    <div class="how-to-use-card">
+        <h2 class="mb-4 text-center">How to Use FruitAI</h2>
+        <p class="text-center text-muted">Follow these simple steps to get insights about your fruit:</p>
+        <ol class="how-to-list">
+            <li><span class="how-to-icon">&#xf030;</span> Click the "Upload Image" button or drag and drop your fruit image into the designated area.</li>
+            <li><span class="how-to-icon">&#xf05a;</span> Ensure your image is clear and well-lit, focusing primarily on a single fruit.</li>
+            <li><span class="how-to-icon">&#xf126;</span> The app will process your image and display the predicted fruit type and its freshness level.</li>
+            <li><span class="how-to-icon">&#xf06a;</span> If the prediction is ambiguous, FruitAI will provide a message indicating the uncertainty.</li>
+        </ol>
 
-            <ol class="how-to-list">
-                <li><i class="fas fa-camera how-to-icon"></i> Take a clear photo of a single fruit. Ensure good lighting and a plain background if possible.</li>
-                <li><i class="fas fa-upload how-to-icon"></i> Drag and drop your image into the upload area or click "Browse Files" to select it.</li>
-                <li><i class="fas fa-brain how-to-icon"></i> FruitAI will quickly process your image to identify the fruit type and its freshness level.</li>
-                <li><i class="fas fa-info-circle how-to-icon"></i> Receive predictions on fruit type, freshness, estimated shelf life, and useful storage tips.</li>
-                <li><i class="fas fa-redo how-to-icon"></i> Easily analyze another fruit using the "Scan Another Fruit" button.</li>
-            </ol>
+        <h3 class="mt-4 mb-3 text-center">Supported Fruits & Freshness Levels</h3>
+        <p class="text-center text-muted">FruitAI is trained on the following. If your fruit isn't here, it might not be recognized.</p>
+        <ul class="how-to-list supported-fruits-list">
+            <li>Apple: Ripe, Rotten</li>
+            <li>Banana: Overripe, Ripe, Unripe</li>
+            <li>Grapes: Ripe, Unripe</li>
+            <li>Guava: Ripe, Unripe</li>
+            <li>Mango: Ripe, Rotten, Unripe</li>
+            <li>Orange: Ripe, Rotten, Unripe</li>
+            <li>Papaya: Ripe, Rotten, Unripe</li>
+            <li>Pineapple: Overripe, Ripe</li>
+            <li>Strawberry: Ripe, Rotten, Unripe</li>
+            <li>Watermelon: Ripe, Rotten</li>
+        </ul>
 
-            <hr style="margin-top: 30px; margin-bottom: 30px;">
-
-            <h3 class="mb-3 text-center" style="color: #4CAF50;">Supported Fruits & Freshness Levels</h3>
-            <p class="text-center text-muted">FruitAI is trained on the following. If your fruit isn't here, it might not be recognized.</p>
-
-            <div class="row justify-content-center">
-                <div class="col-md-10"> <ul class="list-group list-group-flush">
-                        {% for fruit_name, freshness_levels in fruit_data.items() %}
-                            <li class="list-group-item d-flex justify-content-between align-items-left">
-                                <strong>{{ fruit_name|capitalize }}</strong>
-                                <span class="badge bg-primary rounded-pill">
-                                    {% for freshness_key, details in freshness_levels.items() %}
-                                        {{ freshness_key|capitalize }}
-                                        {% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
-            </div>
-
-            <button class="scan-again-button" id="howToUseCloseButton">Back to Upload</button>
-        </div>
+        <button id="howToUseCloseButton" class="scan-again-button mt-4">Close</button>
     </div>
+</section>
+
     <script>
-        // Get elements
+        const welcomeScreen = document.getElementById('welcome-screen');
         const uploadScreen = document.getElementById('upload-screen-section');
         const processingScreen = document.getElementById('processing-screen-section');
         const resultsScreen = document.getElementById('results-screen-section');
         const errorScreen = document.getElementById('error-screen-section');
-        // NEW: Get How To Use screen elements
         const howToUseScreen = document.getElementById('how-to-use-screen-section');
-        const howToUseButton = document.getElementById('howToUseButton');
-        const howToUseCloseButton = document.getElementById('howToUseCloseButton');
-        // END NEW
 
         const uploadArea = document.getElementById('uploadArea');
         const fileInput = document.getElementById('fileInput');
@@ -141,9 +137,9 @@
 
         const scanAgainButton = document.getElementById('scanAgainButton');
         const errorScanAgainButton = document.getElementById('errorScanAgainButton');
+        const howToUseButton = document.getElementById('howToUseButton');
+        const howToUseCloseButton = document.getElementById('howToUseCloseButton');
 
-        // --- Helper Functions to manage screen visibility ---
-        // Get all 'main-screen' elements
         const allMainScreens = document.querySelectorAll('.main-screen');
 
         function showScreen(screenToShow) {
@@ -154,24 +150,20 @@
         }
 
         function resetApp() {
-            fileInput.value = ''; // Clear selected file
-            resultImage.src = '#'; // Clear previous image preview
-            showScreen(uploadScreen); // Show upload screen when resetting
+            fileInput.value = ''; //Clear selected file
+            resultImage.src = '#'; //Clear previous image preview
+            showScreen(uploadScreen); //Show upload screen when resetting
         }
 
-        // --- Event Listeners for User Interaction ---
-        // Make the entire upload area clickable
         uploadArea.addEventListener('click', () => {
             fileInput.click();
         });
 
-        // Prevent click on the button from triggering the parent upload area click
         uploadButton.addEventListener('click', (e) => {
             e.stopPropagation();
             fileInput.click();
         });
-
-        // Drag-and-drop visual feedback
+        //Drag-and-drop visual feedback
         uploadArea.addEventListener('dragover', (e) => {
             e.preventDefault();
             uploadArea.classList.add('drag-over');
@@ -186,25 +178,24 @@
             uploadArea.classList.remove('drag-over');
             const files = e.dataTransfer.files;
             if (files.length > 0) {
-                fileInput.files = files; // Assign dropped files
+                fileInput.files = files; 
                 handleFileSelect();
             }
         });
 
-        // When a file is selected (either via browse or drag-drop)
+        //When a file is selected either via browse or drag-drop
         fileInput.addEventListener('change', handleFileSelect);
 
-        // NEW: Event Listeners for How to Use button
+        //Event Listeners for How to Use button
         howToUseButton.addEventListener('click', () => {
             showScreen(howToUseScreen);
         });
 
         howToUseCloseButton.addEventListener('click', () => {
-            showScreen(uploadScreen); // Go back to the upload screen
+            showScreen(uploadScreen); //Go back to the upload screen
         });
-        // END NEW
 
-        // --- The Core File Upload and Prediction Logic ---
+        //The core logic for upload and prediction
         async function handleFileSelect() {
             if (fileInput.files.length === 0) {
                 errorMessage.textContent = "It looks like no file was selected. Please choose an image to analyze!";
@@ -214,7 +205,7 @@
 
             const file = fileInput.files[0];
             if (!file.type.startsWith('image/')) {
-                errorMessage.textContent = "Whoops! That doesn't look like an image. Please upload a fruit picture (JPG, PNG, etc.).";
+                errorMessage.textContent = "Whoops! That doesn't look like an image. Please upload a JPG or PNG file type.";
                 showScreen(errorScreen);
                 return;
             }
@@ -252,25 +243,21 @@
                 if (data.error) {
                     throw new Error(data.error);
                 }
-
+                
                 predictedFruit.textContent = data.fruit;
-                fruitConfidence.textContent = `(${data.fruit_confidence.toFixed(1)}%)`; // Assuming data.fruit_confidence is already a percentage (0-100) or adjust as needed.
-                                                                                // If it's 0-1, keep the * 100.
+                fruitConfidence.textContent = `(${data.fruit_confidence.toFixed(1)}%)`;
                 predictedFreshness.textContent = data.freshness;
-                freshnessConfidence.textContent = `(${data.freshness_confidence.toFixed(1)}%)`; // Same here
+                freshnessConfidence.textContent = `(${data.freshness_confidence.toFixed(1)}%)`;
                 shelfLife.textContent = data.shelf_life;
                 storageTip.textContent = data.storage_tip;
 
-                // --- NEW: Handle Ambiguity Message ---
                 const ambiguityAlert = document.getElementById('ambiguityAlert');
                 if (data.ambiguity_message) {
                     ambiguityAlert.textContent = data.ambiguity_message;
-                    ambiguityAlert.classList.remove('hidden'); // Show the message
+                    ambiguityAlert.classList.remove('hidden');
                 } else {
-                    ambiguityAlert.classList.add('hidden'); // Hide it if no message
+                    ambiguityAlert.classList.add('hidden');
                 }
-                // --- END NEW ---
-
                 showScreen(resultsScreen);
             } catch (error) {
                 console.error('Error during prediction:', error);
@@ -284,34 +271,20 @@
                 showScreen(errorScreen);
             }
         }
-
-        // --- Scan Again / Try Again Buttons ---
+        //Scan Again/Try Again Buttons
         scanAgainButton.addEventListener('click', resetApp);
         errorScanAgainButton.addEventListener('click', resetApp);
-
-        // --- Welcome Screen & Initial State Logic ---
+        //Welcome Screen
         document.addEventListener('DOMContentLoaded', () => {
-            const welcomeScreen = document.getElementById('welcome-screen');
-            // 'allMainScreens' is already defined above
-
-            // Initially hide all main screens except the upload screen
-            allMainScreens.forEach(screen => {
-                if (screen.id !== 'upload-screen-section') {
-                    screen.classList.add('hidden');
-                } else {
-                    screen.classList.remove('hidden'); // Ensure upload screen is visible
-                }
-            });
-
-            // Set a timeout to hide the welcome screen after 3 seconds
+            //Set a timeout to hide the welcome screen after 3 seconds
             setTimeout(() => {
-                welcomeScreen.classList.add('hidden'); // Start fade-out
-
-                // Completely remove/hide the welcome screen after its transition completes
+                welcomeScreen.classList.add('hidden'); //Start fade out
+                //Completely remove/hide the welcome screen after transition
                 welcomeScreen.addEventListener('transitionend', () => {
                     welcomeScreen.style.display = 'none';
+                    uploadScreen.classList.remove('hidden');
                 }, { once: true });
-            }, 3000); // 3000 milliseconds = 3 seconds
+            }, 3000); //3000 milliseconds = 3 seconds
         });
     </script>
 </body>

@@ -33,10 +33,10 @@ def split_dataset(source_dir, target_dir, split_ratio=0.8):
                     dst = os.path.join(dest_path, img)
                     shutil.copy2(src, dst)
 
-    print("✅ Done splitting the dataset into train/test sets!")
+    print("Done splitting the dataset into train/test sets!")
 
 
-# Paths
+#Paths
 source_dir = "../data/raw/dataset_freshness"
 target_dir = "../data/split/dataset_freshness_split"
 

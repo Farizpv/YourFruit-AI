@@ -5,11 +5,7 @@ from PIL import Image
 from io import BytesIO
 import time
 import random
-
-# For DuckDuckGo Search
 from duckduckgo_search import DDGS
-
-# For Google Image Search with Selenium
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -17,20 +13,18 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-import urllib.parse  # For URL encoding
+import urllib.parse 
 
-# --- Configuration ---
 BASE_DOWNLOAD_DIR = "../data/raw_new_downloads"
 
-# List of fruits to download. Add specific queries for problem areas.
 FRUIT_QUERIES = [
     "apple fruit", "ripe apple", "unripe apple",
     "orange fruit", "ripe orange", "unripe orange",
     "banana fruit", "ripe banana", "unripe banana",
-    "mango fruit", "unripe mango", "green mango", "raw mango",  # Focused on mango confusion
+    "mango fruit", "unripe mango", "green mango", "raw mango",  
     "dragonfruit fruit", "ripe dragonfruit",
     "grapes fruit", "green grapes", "red grapes",
-    "guava fruit", "unripe guava", "green guava",  # Focused on guava confusion
+    "guava fruit", "unripe guava", "green guava",  
     "kiwi fruit", "ripe kiwi", "unripe kiwi",
     "papaya fruit", "unripe papaya",
     "pineapple fruit", "ripe pineapple",
@@ -39,20 +33,18 @@ FRUIT_QUERIES = [
     "pomegranate fruit",
 ]
 
-MAX_IMAGES_PER_QUERY = 100  # Target number of images per query
+MAX_IMAGES_PER_QUERY = 100 
 
-# Your existing fruit classes (ensure this matches your model's classes)
+
 FRUIT_CLASSES = ['apple', 'banana', 'dragonfruit', 'grapes', 'guava', 'kiwi',
                  'mango', 'orange', 'papaya', 'pineapple', 'pomegranate', 'strawberry', 'watermelon']
 
-
-# --- Helper Functions ---
 
 def download_image_from_url(url, save_path, query_name):
     """Helper to download and save a single image."""
     try:
         response = requests.get(url, timeout=10)
-        response.raise_for_status()  # Raise an HTTPError for bad responses (4xx or 5xx)
+        response.raise_for_status()  
         img = Image.open(BytesIO(response.content)).convert('RGB')
         img.save(save_path, format='JPEG')
         return True
@@ -79,7 +71,7 @@ def download_images_ddg(query, save_dir, max_images):
             if download_image_from_url(url, save_path, query):
                 downloaded += 1
             time.sleep(0.5 + random.random() * 0.5)
-    print(f"✅ DuckDuckGo - {query}: Downloaded {downloaded} images.")
+    print(f"DuckDuckGo - {query}: Downloaded {downloaded} images.")
     return downloaded
 
 
@@ -88,7 +80,7 @@ def download_images_google_selenium(query, save_dir, max_images):
     downloaded = 0
 
     options = Options()
-    options.add_argument("--headless")  # Run Chrome in headless mode (no GUI)
+    options.add_argument("--headless") 
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument(
@@ -98,34 +90,32 @@ def download_images_google_selenium(query, save_dir, max_images):
         service = Service(ChromeDriverManager().install())
         driver = webdriver.Chrome(service=service, options=options)
 
-        # Google Images search URL
+        #Google Images search
         search_url = f"https://www.google.com/search?tbm=isch&q={urllib.parse.quote_plus(query)}"
         driver.get(search_url)
 
-        # Scroll down to load more images
+        
         last_height = driver.execute_script("return document.body.scrollHeight")
         while True:
             driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(2 + random.random() * 2)  # Give time for content to load
+            time.sleep(2 + random.random() * 2) 
             new_height = driver.execute_script("return document.body.scrollHeight")
             if new_height == last_height:
-                # Try clicking the "Show more results" button if it exists
                 try:
                     show_more_button = driver.find_element(By.CSS_SELECTOR, 'input[value="Show more results"]')
                     show_more_button.click()
-                    time.sleep(2 + random.random() * 2)  # Wait for new results
-                    new_height = driver.execute_script("return document.body.scrollHeight")  # Check height again
-                    if new_height == last_height:  # If still no new content, break
+                    time.sleep(2 + random.random() * 2)  
+                    new_height = driver.execute_script("return document.body.scrollHeight") 
+                    if new_height == last_height:  
                         break
                 except Exception:
-                    break  # No more results button or already clicked
+                    break  
 
             last_height = new_height
-            if downloaded >= max_images:  # Break early if we have enough images
+            if downloaded >= max_images: 
                 break
 
-        # Extract image URLs
-        img_elements = driver.find_elements(By.CSS_SELECTOR, 'img.Q4LuWd')  # This CSS selector might change!
+        img_elements = driver.find_elements(By.CSS_SELECTOR, 'img.Q4LuWd')  
         urls = []
         for img in img_elements:
             src = img.get_attribute('src')
@@ -134,7 +124,6 @@ def download_images_google_selenium(query, save_dir, max_images):
                 if len(urls) >= max_images:
                     break
 
-        # Download images
         for i, url in enumerate(urls):
             if downloaded >= max_images:
                 break
@@ -142,15 +131,15 @@ def download_images_google_selenium(query, save_dir, max_images):
             save_path = os.path.join(save_dir, filename)
             if download_image_from_url(url, save_path, query):
                 downloaded += 1
-            time.sleep(0.1 + random.random() * 0.1)  # Faster download once URLs are collected
+            time.sleep(0.1 + random.random() * 0.1) 
 
     except Exception as e:
-        print(f"🔥 Google Images - Error during Selenium search for '{query}': {e}")
+        print(f"Google Images - Error during Selenium search for '{query}': {e}")
     finally:
         if 'driver' in locals() and driver:
-            driver.quit()  # Always close the browser
+            driver.quit() 
 
-    print(f"✅ Google Images - {query}: Downloaded {downloaded} images.")
+    print(f"Google Images - {query}: Downloaded {downloaded} images.")
     return downloaded
 
 
@@ -172,30 +161,24 @@ def remove_duplicates(folder_path):
                     hashes.add(filehash)
             except Exception as e:
                 print(f"Error reading or deleting {filepath}: {e}")
-    print(f"🗑️ Removed {removed} duplicates in {folder_path}")
+    print(f"Removed {removed} duplicates in {folder_path}")
 
 
-# --- MAIN EXECUTION ---
-# Ensure the base download directory exists
 os.makedirs(BASE_DOWNLOAD_DIR, exist_ok=True)
 
-# Choose your image source here: 'ddg' or 'google'
-# WARNING: 'google' is experimental and may fail frequently!
-IMAGE_SOURCE = 'ddg'  # Set this to 'google' if you want to try Google Images
+IMAGE_SOURCE = 'ddg'  #set to duckduckgo
 
 for query in FRUIT_QUERIES:
-    # Determine the fruit name from the query for folder naming
     fruit_name_for_folder = None
     for known_fruit in FRUIT_CLASSES:
-        if known_fruit in query.lower():  # Check if known fruit is in query (case-insensitive)
-            fruit_name_for_folder = known_fruit
+        if known_fruit in query.lower():  #Checking if known fruit is in query 
             break
 
     if fruit_name_for_folder is None:
         print(f"Skipping query '{query}': Could not determine fruit folder name from known classes.")
         continue
 
-    # Create a subfolder for each fruit within the BASE_DOWNLOAD_DIR
+    #Create a subfolder for each fruit within the BASE_DOWNLOAD_DIR
     save_folder = os.path.join(BASE_DOWNLOAD_DIR, fruit_name_for_folder)
 
     if IMAGE_SOURCE == 'ddg':
@@ -204,11 +187,10 @@ for query in FRUIT_QUERIES:
         download_images_google_selenium(query, save_folder, max_images=MAX_IMAGES_PER_QUERY)
     else:
         print("Invalid IMAGE_SOURCE specified. Please choose 'ddg' or 'google'.")
-        break  # Exit if source is invalid
+        break  
 
-    # Remove duplicates within the newly downloaded batch (per query)
+    #Remove duplicates within the newly downloaded batch
     remove_duplicates(save_folder)
 
-print("🎉 Done downloading and cleaning new dataset!")
+print("Done downloading and cleaning new dataset!")
 print(f"New images are in: {BASE_DOWNLOAD_DIR}")
-print("NEXT STEP: Manually inspect and integrate these into your main training/testing dataset.")

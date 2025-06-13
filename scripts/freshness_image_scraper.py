@@ -39,7 +39,7 @@ for fruit, stages in fruit_freshness.items():
         download_dir = os.path.join(base_dir, fruit, stage)
         os.makedirs(download_dir, exist_ok=True)
 
-        print(f"\n🔽 Downloading: {query}")
+        print(f"\nDownloading: {query}")
         crawler = GoogleImageCrawler(storage={'root_dir': download_dir})
         crawler.crawl(keyword=query, max_num=50)
 
@@ -48,6 +48,6 @@ for fruit, stages in fruit_freshness.items():
             file_path = os.path.join(download_dir, file)
             if not is_valid_image(file_path):
                 os.remove(file_path)
-                print(f"❌ Removed invalid: {file_path}")
+                print(f"Removed invalid: {file_path}")
 
-print("\n✅ All images downloaded and cleaned successfully!")
+print("\nAll images downloaded and cleaned successfully!")

@@ -4,19 +4,15 @@ from tensorflow.keras.models import load_model
 from PIL import Image
 import json
 
-# Constants
 FRUIT_MODEL_PATH = os.path.join("models", "fruit_classifier_mobilenetv2.h5")
 FRESHNESS_MODEL_DIR = os.path.join("models", "freshness_models")
 
 def load_models():
-    # Load fruit classifier
     fruit_model = load_model(FRUIT_MODEL_PATH)
 
-    # Load fruit labels
     with open("fruit_details.json") as f:
         fruit_labels = json.load(f)["fruit_labels"]
 
-    # Load freshness models + labels
     freshness_models = {}
     freshness_labels = {}
     for filename in os.listdir(FRESHNESS_MODEL_DIR):

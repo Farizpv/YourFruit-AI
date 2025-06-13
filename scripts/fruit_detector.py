@@ -5,16 +5,14 @@ from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 import matplotlib.pyplot as plt
 
-# Paths
 train_dir = '../data/split/dataset_fruit_type_split/train'
 test_dir = '../data/split/dataset_fruit_type_split/test'
 
-# Image params
 IMG_SIZE = (150, 150)
 BATCH_SIZE = 32
-NUM_CLASSES = len(tf.io.gfile.listdir(train_dir))  # count fruit folders
+NUM_CLASSES = len(tf.io.gfile.listdir(train_dir))  #count fruit folders
 
-# Data augmentation & preprocessing for train
+#Data augmentation & preprocessing 
 train_datagen = ImageDataGenerator(
     preprocessing_function=preprocess_input,
     rotation_range=20,
@@ -26,10 +24,9 @@ train_datagen = ImageDataGenerator(
     fill_mode='nearest'
 )
 
-# For test data, just preprocess
 test_datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
-# Load data
+#Load data
 train_generator = train_datagen.flow_from_directory(
     train_dir,
     target_size=IMG_SIZE,
@@ -44,11 +41,10 @@ test_generator = test_datagen.flow_from_directory(
     class_mode='categorical'
 )
 
-# Load MobileNetV2 base model, exclude top layers
+#Load MobileNetV2 base model
 base_model = MobileNetV2(input_shape=(*IMG_SIZE, 3), include_top=False, weights='imagenet')
-base_model.trainable = False  # Freeze base model
+base_model.trainable = False 
 
-# Build your model on top
 model = models.Sequential([
     base_model,
     layers.GlobalAveragePooling2D(),
@@ -66,13 +62,13 @@ model.compile(
 
 model.summary()
 
-# Callbacks
+#Callbacks
 callbacks = [
     tf.keras.callbacks.ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, verbose=1),
     tf.keras.callbacks.EarlyStopping(monitor='val_loss', patience=7, restore_best_weights=True)
 ]
 
-# Train only top layers first
+#Train only top layers
 EPOCHS = 20
 history = model.fit(
     train_generator,
@@ -81,15 +77,13 @@ history = model.fit(
     callbacks=callbacks
 )
 
-# Optional: fine-tune some of the base model layers for extra juice
-
-# Unfreeze last 20 layers of base_model
+#Unfreeze last 20 layers of base model
 base_model.trainable = True
 for layer in base_model.layers[:-20]:
     layer.trainable = False
 
 model.compile(
-    optimizer=optimizers.Adam(learning_rate=1e-5),  # lower LR for fine-tuning
+    optimizer=optimizers.Adam(learning_rate=1e-5),  #lower LR for fine-tuning
     loss='categorical_crossentropy',
     metrics=['accuracy']
 )
@@ -105,11 +99,11 @@ history_fine = model.fit(
     callbacks=callbacks
 )
 
-#save the model
+#save model
 model.save("fruit_classifier_mobilenetv2.h5")
 
 
-#plotting the curves
+#curves
 def plot_history(history):
     acc = history.history['accuracy']
     val_acc = history.history['val_accuracy']

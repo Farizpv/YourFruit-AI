@@ -1,3 +1,8 @@
+/* Add at the very top of your stylesheet */
+* {
+    box-sizing: border-box;
+}
+
 /* app/static/style.css */
 
 /* --- General Body Styles --- */
@@ -10,13 +15,13 @@ body {
     min-height: 100vh; /* Keeps the centering effect */
     background: linear-gradient(135deg, #a8dadc, #457b9d);
     color: #333;
-    overflow-y: auto; /* CHANGE: Allow body to scroll if card itself is very tall on small screens */
+    overflow-y: auto; /* Allow body to scroll if card itself is very tall on small screens */
     overflow-x: hidden; /* Prevent horizontal scrolling */
     padding: 10px 0; /* Add some minimal padding to ensure space from top/bottom edges */
     box-sizing: border-box;
 }
 
-/* --- NEW: Styles for all main content screens (upload, processing, results, error) --- */
+/* --- Styles for all main content screens (upload, processing, results, error, how-to-use) --- */
 .main-screen {
     background-color: rgba(255, 255, 255, 0.95);
     border-radius: 15px;
@@ -29,14 +34,14 @@ body {
     opacity: 0;
     transition: opacity 0.8s ease-in, transform 0.8s ease-in;
     transform: translateY(-20px);
-    /* CHANGE: Adjusted margin to be more flexible and prevent overflow */
     margin: 20px auto; /* Auto for horizontal centering, 20px top/bottom */
     flex-shrink: 0;
-    /* ADDED: Max height to prevent overflowing the viewport, but allowing internal content to shrink */
     max-height: calc(100vh - 40px); /* 100vh minus 20px top/bottom body padding */
     display: flex; /* Make it a flex container */
     flex-direction: column; /* Stack content vertically */
     justify-content: space-between; /* Distribute space between elements if needed */
+    overflow-y: auto; /* IMPORTANT: Allow content within the main-screen to scroll if it exceeds max-height */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS devices */
 }
 
 /* For when a main screen is shown by JavaScript */
@@ -50,7 +55,7 @@ body {
     display: none !important;
 }
 
-/* --- Welcome Screen Styles (No changes needed here) --- */
+/* --- Welcome Screen Styles --- */
 #welcome-screen {
     position: fixed;
     top: 0;
@@ -103,28 +108,32 @@ body {
 .fruit-animation-line {
     width: 100%;
     position: absolute;
-    bottom: -30px;
+    bottom: -30px; /* Adjusted to original bottom placement for horizontal line */
     left: 0;
-    overflow: hidden;
-    height: 5em;
+    overflow: hidden; /* Crucial for clipping the initial drop-down */
+    height: 5em; /* Original height */
     display: flex;
-    align-items: center;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center horizontally */
 }
 
+/* Important: This class is for the wrapper DIV *inside* fruit-animation-line */
 .fruit-icons-wrapper {
-    display: flex;
-    white-space: nowrap;
-    animation: slideHorizontal 20s linear infinite;
-    height: 100%;
+    display: flex; /* Keep them horizontal */
+    white-space: nowrap; /* Keep icons on a single line */
+    height: auto; /* Allow height to adjust to content */
+    width: max-content; /* Allow width to adjust to content */
+    justify-content: center; /* Ensures icons are centered if wrapper is smaller than line */
 }
 
+/* Base style for icons, ensure they start invisible and off-screen for the drop-down */
 .fruit-icon {
     font-size: 2em;
     color: #ffffff;
-    opacity: 0.9;
-    padding: 0 0.9em;
-    animation: gentleDip 3s ease-in-out infinite alternate;
-    flex-shrink: 0;
+    opacity: 0; /* Start completely invisible */
+    transform: translateY(-50px); /* Start 50px above their final position */
+    padding: 0 0.6em; /* Adjusted padding: reduced from 0.9em to 0.6em */
+    flex-shrink: 0; /* Prevent icons from shrinking */
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -156,15 +165,36 @@ body {
     100% { transform: rotate(360deg); }
 }
 
-@keyframes slideHorizontal {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
+/* NEW: Drop Down Keyframes for individual icons */
+@keyframes dropDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px); /* Start hidden above */
+    }
+    60% { /* Slight overshoot for a nice "bounce" effect */
+        opacity: 1;
+        transform: translateY(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Final resting position */
+    }
 }
 
-@keyframes gentleDip {
-    from { transform: translateY(0); }
-    to { transform: translateY(10px); }
-}
+/* Apply staggered animation to each fruit icon */
+/* Adjust the 'forwards' delay (e.g., 0.2s, 0.4s, etc.) to get your desired timing */
+.fruit-icon:nth-child(1) { animation: dropDown 0.8s ease-out forwards 0.2s; }
+.fruit-icon:nth-child(2) { animation: dropDown 0.8s ease-out forwards 0.4s; }
+.fruit-icon:nth-child(3) { animation: dropDown 0.8s ease-out forwards 0.6s; }
+.fruit-icon:nth-child(4) { animation: dropDown 0.8s ease-out forwards 0.8s; }
+.fruit-icon:nth-child(5) { animation: dropDown 0.8s ease-out forwards 1.0s; }
+.fruit-icon:nth-child(6) { animation: dropDown 0.8s ease-out forwards 1.2s; }
+.fruit-icon:nth-child(7) { animation: dropDown 0.8s ease-out forwards 1.4s; }
+.fruit-icon:nth-child(8) { animation: dropDown 0.8s ease-out forwards 1.6s; }
+.fruit-icon:nth-child(9) { animation: dropDown 0.8s ease-out forwards 1.8s; }
+.fruit-icon:nth-child(10) { animation: dropDown 0.8s ease-out forwards 2.0s; }
+.fruit-icon:nth-child(11) { animation: dropDown 0.8s ease-out forwards 2.2s; }
+.fruit-icon:nth-child(12) { animation: dropDown 0.8s ease-out forwards 2.4s; }
 
 
 /* --- Upload Screen Specifics --- */
@@ -259,9 +289,7 @@ body {
 .fruit-analysis-container.main-screen {
     max-width: 600px;
     min-height: auto;
-    /* CHANGE: Remove display: flex to prevent it from fighting with .main-screen's flex-direction: column */
-    display: block; /* Let it behave like a standard block element within .main-screen */
-    padding: 0;
+    padding: 0; /* Changed to 0 so the inner card handles padding */
 }
 
 .fruit-analysis-card {
@@ -274,12 +302,12 @@ body {
     width: 100%;
     box-sizing: border-box;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    /* CHANGE: Allow content to dictate height, but shrink where possible */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* ADDED: Add padding-bottom to ensure button doesn't hug the bottom too much */
     padding-bottom: 10px;
+    overflow-y: auto; /* Added: Ensure inner content doesn't overflow */
+    -webkit-overflow-scrolling: touch;
 }
 
 .fruit-analysis-card:hover {
@@ -312,7 +340,7 @@ body {
 }
 
 .result-image-container {
-    margin-bottom: 15px; /* CHANGE: Reduced margin to save vertical space */
+    margin-bottom: 15px; /* Reduced margin to save vertical space */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -321,7 +349,7 @@ body {
 
 .uploaded-fruit-img {
     max-width: 100%;
-    max-height: 200px; /* CHANGE: Reduced max-height to save vertical space */
+    max-height: 200px; /* Reduced max-height to save vertical space */
     height: auto;
     object-fit: contain;
     border-radius: 10px;
@@ -330,7 +358,7 @@ body {
 
 .prediction-info p {
     font-size: 1.2em;
-    margin: 8px 0; /* CHANGE: Reduced margin */
+    margin: 8px 0; /* Reduced margin */
     color: #333;
     text-align: center;
 }
@@ -343,8 +371,8 @@ body {
 .advice-info {
     background-color: #f1faee;
     border-radius: 10px;
-    padding: 15px; /* CHANGE: Reduced padding */
-    margin-top: 20px; /* CHANGE: Reduced margin */
+    padding: 15px; /* Reduced padding */
+    margin-top: 20px; /* Reduced margin */
     text-align: left;
     width: 100%;
     box-sizing: border-box;
@@ -353,12 +381,12 @@ body {
 .advice-info h3 {
     color: #1d3557;
     margin-top: 0;
-    margin-bottom: 10px; /* CHANGE: Reduced margin */
+    margin-bottom: 10px; /* Reduced margin */
     font-size: 1.3em;
 }
 
 .advice-info p {
-    margin-bottom: 8px; /* CHANGE: Reduced margin */
+    margin-bottom: 8px; /* Reduced margin */
     line-height: 1.5;
     color: #333;
 }
@@ -368,10 +396,10 @@ body {
     color: #1d3557;
     border: none;
     border-radius: 8px;
-    padding: 10px 20px; /* CHANGE: Slightly reduced padding */
-    font-size: 1em; /* CHANGE: Slightly reduced font size */
+    padding: 10px 20px; /* Slightly reduced padding */
+    font-size: 1em; /* Slightly reduced font size */
     cursor: pointer;
-    margin-top: 25px; /* CHANGE: Reduced margin to pull it up */
+    margin-top: 25px; /* Reduced margin to pull it up */
     transition: background-color 0.3s ease, transform 0.2s ease;
     font-weight: 600;
 }
@@ -463,14 +491,30 @@ body {
 /* --- How to Use Card (similar to upload-area/fruit-analysis-card) --- */
 .how-to-use-card {
     background-color: #fff;
-    padding: 30px;
+    padding: 20px; /* Reduced padding from 30px to 20px */
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    max-width: 600px; /* Adjust as needed */
-    width: 90%;
+    max-width: 600px;
+    width: 100%;
     text-align: center;
-    margin: 40px auto; /* Center the card and add vertical space */
+    margin: 0;
     animation: fadeIn 0.5s ease-out;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    max-height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Targeting specific elements within the How to Use card for size adjustments */
+.how-to-use-card h2.mb-4.text-center {
+    font-size: 1.8em; /* Adjusted smaller from previous value */
+    margin-bottom: 15px; /* Adjusted margin */
+}
+.how-to-use-card p.text-center.text-muted {
+    font-size: 0.9em; /* Adjusted smaller from previous value */
+    margin-bottom: 20px; /* Adjusted margin */
 }
 
 .how-to-list {
@@ -478,39 +522,63 @@ body {
     padding: 0;
     text-align: left; /* Align list items left within the card */
     margin-top: 25px;
+    /* Removed: overflow-y: auto; to allow the parent card to handle scrolling */
+    -webkit-overflow-scrolling: touch;
+    flex-grow: 1; /* Allow the list to take up available space and push button down */
 }
 
 .how-to-list li {
     background-color: #f9f9f9;
     margin-bottom: 10px;
-    padding: 12px 15px;
+    padding: 10px 10px; /* Reduced padding from 12px 15px to 10px 10px */
     border-radius: 8px;
     display: flex;
     align-items: center;
-    font-size: 0.95em;
+    font-size: 0.9em; /* Adjusted smaller from previous value */
     line-height: 1.4;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .how-to-icon {
     color: #4CAF50; /* Green icon color */
-    margin-right: 15px;
-    font-size: 1.2em;
-    min-width: 25px; /* Ensure icons align nicely */
+    margin-right: 10px; /* Adjusted smaller from 15px to 10px */
+    font-size: 1em; /* Adjusted smaller from 1.2em to 1em */
+    min-width: 20px; /* Adjusted smaller from 25px to 20px */
     text-align: center;
+    /* NEW: Add these lines for Font Awesome unicode icons */
+    font-family: "Font Awesome 5 Free"; /* This tells it to use the FA font */
+    font-weight: 900; /* Important for "solid" style icons (like fas) */
+}
+/* Custom bullets for the supported fruits list */
+.how-to-list.supported-fruits-list li {
+    list-style: none; /* Remove default browser bullets */
+    position: relative; /* For positioning our custom bullet */
+    padding-left: 25px; /* Make space for the custom bullet */
+    margin-bottom: 5px; /* A little less space between items for compactness */
+}
+
+.how-to-list.supported-fruits-list li::before {
+    content: '\2022'; /* Unicode for a simple round bullet point */
+    color: #4CAF50; /* A cool green color for the bullet */
+    font-size: 1.1em; /* Slightly larger bullet */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* Existing .scan-again-button can be reused for the close button */
 #howToUseCloseButton {
     margin-top: 30px; /* Space above the button */
+    flex-shrink: 0; /* Prevent button from shrinking */
 }
 
 /* Ensure the main-screen has enough height for the how-to-use-screen */
 #how-to-use-screen-section {
-    min-height: calc(100vh - 100px); /* Adjust based on your header/footer */
-    display: flex; /* Use flexbox to center content vertically if needed */
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 }
 /* For mobile devices */
 @media (max-width: 600px) {
@@ -575,5 +643,26 @@ body {
     }
     .upload-icon {
         font-size: 2em;
+    }
+    /* Specific adjustments for how-to-use screen on mobile */
+    .how-to-use-card {
+        padding: 15px; /* Even less padding for card on mobile */
+    }
+    .how-to-use-card h2.mb-4.text-center {
+        font-size: 1.5em; /* Smaller on very small screens */
+        margin-bottom: 10px;
+    }
+    .how-to-use-card p.text-center.text-muted {
+        font-size: 0.8em;
+        margin-bottom: 15px;
+    }
+    .how-to-list li {
+        padding: 8px 8px; /* Even less padding on mobile list items */
+        font-size: 0.8em;
+    }
+    .how-to-icon {
+        margin-right: 8px;
+        font-size: 0.9em;
+        min-width: 18px;
     }
 }

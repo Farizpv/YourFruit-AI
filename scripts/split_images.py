@@ -6,7 +6,7 @@ source_dir = '../data/raw/dataset_fruit_type'
 target_dir = '../data/split/dataset_fruit_type_split'
 split_ratio = 0.8  # 80% training, 20% testing
 
-# Create train and test directories
+#Create the train and test directories
 for category in os.listdir(source_dir):
     category_path = os.path.join(source_dir, category)
     if not os.path.isdir(category_path):
