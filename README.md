@@ -1,16 +1,16 @@
-# FruitAI-Flask-App 🍎🍌🍇
+# FruitAI-Flask-App
 
 ## Intelligent Fruit Identification and Freshness Advisor
 
 ---
 
-## 🌟 Overview
+## Overview
 
 The FruitAI-Flask-App is a web application designed to help users identify various types of fruits and assess their freshness based on an uploaded image. It leverages machine learning models to provide instant predictions, along with practical tips on shelf life and optimal storage. This project aims to contribute to reducing food waste and promoting healthier eating habits.
 
 ---
 
-## ✨ Features
+## Features
 
 * **Fruit Identification:** Identifies common fruits from uploaded images.
 * **Freshness Assessment:** Predicts the freshness status (e.g., ripe, unripe, overripe, rotten) of the identified fruit.
@@ -20,7 +20,7 @@ The FruitAI-Flask-App is a web application designed to help users identify vario
 
 ---
 
-## 🚀 Getting Started (Local Development)
+## Getting Started (Local Development)
 
 To get a local copy of this project up and running on your machine, follow these steps.
 
@@ -78,7 +78,7 @@ Once your dependencies are installed, you can run the Flask application:
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ├── app/
 │   ├── init.py         # Flask app initialization
@@ -109,33 +109,11 @@ Once your dependencies are installed, you can run the Flask application:
 
 ---
 
-## 📈 Future Vision
+## Future Vision
 
 * **Cloud Deployment:** Deploy the Flask web application to a platform like Render.com and offload AI inference to a dedicated serverless function (e.g., Google Cloud Functions) for better scalability and resource management.
 * **Mobile Application:** Explore developing a native Android (or cross-platform) mobile application to bring FruitAI directly to users' smartphones.
 * **More Fruit Varieties:** Expand the dataset and train models to identify a wider range of fruits.
 * **Enhanced UI/UX:** Improve the user interface for a more polished and interactive experience.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! If you have suggestions, bug reports, or ideas for improvements, please feel free to:
-
-1.  Fork the repository.
-2.  Create a new branch (`git checkout -b feature/your-feature-name`).
-3.  Make your changes.
-4.  Commit your changes (`git commit -m 'Add new feature'`).
-5.  Push to the branch (`git push origin feature/your-feature-name`).
-6.  Open a Pull Request.
-
----
-
-## 📞 Contact
-
-For any questions or collaborations, feel free to reach out:
-
-* **Muhammed Fariz PV**- https://github.com/Farizpv
-* **Email:** farizpv1001@gmail.com
 
 ---
